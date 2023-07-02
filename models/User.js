@@ -1,24 +1,16 @@
-const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
-const sequelize = require('../config/connection');
+const { Schema, model, Types } = require("mongoose");
 
-class User extends Model {
-  checkPassword(loginPw) {
-    return bcrypt.compareSync(loginPw, this.password);
-  }
-}
-
-User.init(
+const userSchema = new Schema(
   {
     username: {
-      type: DataTypes.STRING,
+      type: String,
       allowNull: false,
       unique:true,
       required:true,
       trim:true
     },
     email: {
-      type: DataTypes.STRING,
+      type: String,
       require:true,
       unique: true,
       match: [
@@ -45,5 +37,6 @@ User.init(
 userSchema.virtual("friendCount").get(function(){
   return this.friends.length
 })
-const User= model("User", userSchema)
+const User = model("User", userSchema)
+
 module.exports = User;
