@@ -1,15 +1,14 @@
 // make routes for all the users
-const express = require('express');
 const router = require('express').Router();
 const {
   getUsers,
-  getOneUser,
+  getSingleUser,
   createUser,
   updateUser,
   deleteUser,
   addFriend,
-  deleteFriend,
-} = require("../../controllers/userController");
+  removeFriend,
+} = require('../../controllers/userController');
 
 // /api/users
 router.route('/').get(getUsers).post(createUser);
