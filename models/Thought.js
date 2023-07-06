@@ -1,51 +1,38 @@
-const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
-const sequelize = require('../config/connection');
+const { Schema, model } = require('mongoose');
+const reactionSchema = require('./Reaction');
+const dateFormat = require('../utils/dateFormat');
 
-class User extends Model {
-  checkPassword(loginPw) {
-    return bcrypt.compareSync(loginPw, this.password);
-  }
-}
-
-User.init(
+const thoughtSchema = new Schema(
   {
+    thoughtText: {
+      type: String,
+      required: 'You need to leave a thought!',
+      minlength: 1,
+      maxlength: 280
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: timestamp => dateFormat(timestamp)
+    },
     username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique:true,
-      required:true,
-      trim:true
+      type: String,
+      required: true
     },
-    email: {
-      type: DataTypes.STRING,
-      require:true,
-      unique: true,
-      match: [
-        /.+@.+\..+/,"must be a valid email address"
-      ],
-    },
-    thoughts:[{
-      type: Schema.Types.ObjectId,
-      ref:"Thought"
-    }],
-    friends: [{
-      type: Schema.Types.ObjectId,
-      ref: "User"
-    }],
+    reactions: [reactionSchema]
   },
   {
     toJSON: {
-      virtuals:true,
-      getters:true
+      getters: true
     },
-    id:false,
+    id: false
   }
 );
-userSchema.virtual("friendCount").get(function(){
-  return this.friends.length
-})
-const User= model("User", userSchema)
-module.exports = User;
 
-this.reactions.length
+thoughtSchema.virtual('reactionCount').get(function () {
+  return this.reactions.length;
+});
+
+const Thought = model('Thought', thoughtSchema);
+
+module.exports = Thought;

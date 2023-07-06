@@ -1,50 +1,32 @@
-const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
-const sequelize = require('../config/connection');
+const { Schema, Types } = require('mongoose');
+const dateFormat = require('../utils/dateFormat');
 
-class User extends Model {
-  checkPassword(loginPw) {
-    return bcrypt.compareSync(loginPw, this.password);
-  }
-}
-
-User.init(
+const reactionSchema = new Schema(
   {
+    reactionId: {
+      type: Schema.Types.ObjectId,
+      default: () => new Types.ObjectId()
+    },
+    reactionBody: {
+      type: String,
+      required: true,
+      maxlength: 280
+    },
     username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique:true,
-      required:true,
-      trim:true
+      type: String,
+      required: true
     },
-    email: {
-      type: DataTypes.STRING,
-      require:true,
-      unique: true,
-      match: [
-        /.+@.+\..+/,"must be a valid email address"
-      ],
-    },
-    thoughts:[{
-      type: Schema.Types.ObjectId,
-      ref:"Thought"
-    }],
-    friends: [{
-      type: Schema.Types.ObjectId,
-      ref: "User"
-    }],
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
   },
   {
     toJSON: {
-      virtuals:true,
-      getters:true
+      getters: true
     },
-    id:false,
+    id: false
   }
-);
-userSchema.virtual("friendCount").get(function(){
-  return this.friends.length
-})
-const User= model("User", userSchema)
-module.exports = User;
+)
 
+module.exports = reactionSchema
