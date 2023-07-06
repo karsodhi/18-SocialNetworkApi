@@ -2,26 +2,29 @@ const User = require('../models/User');
 
 module.exports = {
 // get all users
-getAllUsers(req,res){
-  User.find()
-  .then((users)=> res.json(users))
-  .catch((error) => res.status(500).json(error))
-},
-  //  Get all users
-  // async getUsers(req, res) {
-  //   try {
-  //     const users = await User.find();
-  //     res.json(users);
-  //   } catch (err) {
-  //     res.status(500).json(err);
-  //   }
-  // },
+// getAllUsers(req,res){
+//   User.find()
+//   .then((users)=> res.json(users))
+//   .catch((error) => res.status(500).json(error))
+// },
+  async getUsers(req, res) {
+    try {
+      const users = await User.find()
+        .select('-__v')
+
+      res.json(users);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 
   // Get a single user
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
-        .select('-__v');
+        .select('-__v')
+        .populate('friends')
+        .populate('thoughts');
 
       if (!user) {
         return res.status(404).json({ message: 'No user with that ID' });

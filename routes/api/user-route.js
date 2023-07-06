@@ -1,7 +1,6 @@
-// make routes for all the users
 const router = require('express').Router();
 const {
-  getUsers,
+  getAllUsers,
   getSingleUser,
   createUser,
   updateUser,
@@ -11,7 +10,7 @@ const {
 } = require('../../controllers/userController');
 
 // /api/users
-router.route('/').get(getUsers).post(createUser);
+router.route('/').get(getAllUsers).post(createUser);
 
 // /api/users/:userId
 router.route('/:userId').get(getSingleUser).put(updateUser).delete(deleteUser);
