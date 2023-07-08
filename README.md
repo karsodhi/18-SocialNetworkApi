@@ -8,9 +8,11 @@ Had help from tutoring session through Northwestern Coding Camp
 
 # Links
 
-Live Video:
+Live Video: https://drive.google.com/file/d/11BXP97cADOPKCAszGo-GZjOe9qDbTVJn/view
 
-Github Repo:
+Github Repo: https://github.com/karsodhi/18-SocialNetworkApi
+
 
 # Screenshot
 
+![Picture](./images/socialNetwork.jpg)
