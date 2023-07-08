@@ -1,12 +1,6 @@
 const User = require('../models/User');
 
 module.exports = {
-// get all users
-// getAllUsers(req,res){
-//   User.find()
-//   .then((users)=> res.json(users))
-//   .catch((error) => res.status(500).json(error))
-// },
   async getUsers(req, res) {
     try {
       const users = await User.find()
@@ -67,5 +61,30 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err))
   },
+  // add a friend
+  addFriend({params}, res) {
+    User.findOneAndUpdate(
+      {_id: params.userId},
+      {$push: {friends: params.friendId}},
+      {new: true, runValidators: true}
+    ) .then((user) => 
+      !user
+      ? res.status(404).json({message: "No friend with that ID found"})
+      : res.json(user)
+    )
+    .catch((err) => res.status(500).json(err))
+},
+// remove a friend
+removeFriend({params}, res) {
+  User.findOneAndUpdate(
+    {_id: params.userId},
+    {$pull: {friends: params.friendId}},
+    {new: true, runValidators: true}
+  ) .then((user) => 
+    !user
+    ? res.status(404).json({message: "No friend with that ID found"})
+    : res.json(user)
+  )
+  .catch((err) => res.status(500).json(err))
 }
-
+};
